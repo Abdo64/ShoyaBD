@@ -31,7 +31,7 @@
 
         form {
             background: rgba(0, 0, 0, 0.8);
-            padding: 010px ;
+            padding: 010px;
             /* border-radius: 10px; */
             box-shadow: 0 0 10px #00ffcc;
             margin-bottom: 0px;
@@ -42,12 +42,14 @@
             flex-direction: column;
             align-items: center;
         }
-#message-form {
+
+        #message-form {
             display: flex;
             flex-direction: row-reverse;
             align-items: center;
             justify-content: center;
         }
+
         textarea,
         input {
             width: 60%;
@@ -145,6 +147,28 @@
             left: 20%;
             animation-delay: 0.5s;
         }
+
+        .name-logout {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            width: 100%;
+            text-align: center;
+        }
+        .name-logout h1 {
+            margin: 0;
+            margin-left: 10px;
+        }
+        .name-logout a {
+            color: #00ffcc;
+            text-decoration: none;
+            margin-left: 10px;
+            padding: 5px 10px;
+            background: #001f3f;
+            border-radius: 5px;
+            box-shadow: 0 0 1px #00ffcc, 0 0 5px #00ffcc;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
     </style>
 </head>
 
@@ -155,8 +179,11 @@
     <div class="firefly"></div>
     <div class="firefly"></div>
 
-    <h1>مرحباً، {{ username }}</h1>
-    <a href="/logout">تسجيل الخروج</a>
+
+    <div class="name-logout">
+        <h1>مرحباً، {{ username }}</h1>
+        <a href="/logout">تسجيل الخروج</a>
+    </div>
 
     <h2>الرسائل</h2>
     <ul id="messages">
@@ -169,11 +196,11 @@
 
     <form method="POST" action="/send_message">
         <h2>أضف رسالة</h2>
-<div id="message-form">
-    <textarea name="content" rows="3" cols="50" required></textarea>
-    <button type="submit">إرسال</button>
-</div>
-        
+        <div id="message-form">
+            <textarea name="content" rows="3" cols="50" required></textarea>
+            <button type="submit">إرسال</button>
+        </div>
+
     </form>
     <script>
         const socket = io();
