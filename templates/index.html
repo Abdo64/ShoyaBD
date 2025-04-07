@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الرسائل</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        body {
+            background-color: #001f3f;
+            color: #00ffcc;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            direction: rtl;
+        }
+
+        h1,
+        h2 {
+            text-shadow: 0 0 3px #00ffcc, 0 0 4px #00ffcc;
+            /* Reduced shadow intensity */
+        }
+
+        form {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            /* border-radius: 10px; */
+            box-shadow: 0 0 10px #00ffcc;
+            margin-bottom: 0px;
+            margin-top: auto;
+            display: flex;
+
+            width: 90%;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        textarea,
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            background: #002b4f;
+            color: #00ffcc;
+            box-shadow: inset 0 0 3px #00ffcc;
+            /* Reduced shadow intensity */
+        }
+
+        button {
+            background: #00ffcc;
+            color: #001f3f;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100px;
+            font-size: 1.5rem;
+            font-weight: bolder;
+            box-shadow: 0 0 1px #00ffcc, 0 0 5px #00ffcc;
+            /* Reduced shadow intensity */
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px #00ffcc, 0 0 15px #00ffcc;
+            /* Reduced hover shadow intensity */
+        }
+
+        a {
+            color: #00ffcc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-shadow: 0 0 5px #00ffcc;
+            /* Reduced hover shadow intensity */
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            width: 90%;
+            max-height: 60%;
+            overflow-y: auto;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .firefly {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #00ffcc;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+            /* Reduced firefly shadow intensity */
+            animation: firefly 2s infinite ease-in-out;
+        }
+
+        .firefly:nth-child(1) {
+            top: 20%;
+            left: 30%;
+            animation-delay: 0s;
+        }
+
+        .firefly:nth-child(2) {
+            top: 50%;
+            left: 70%;
+            animation-delay: 1s;
+        }
+
+        .firefly:nth-child(3) {
+            top: 80%;
+            left: 40%;
+            animation-delay: 2s;
+        }
+
+        .firefly:nth-child(4) {
+            top: 30%;
+            left: 60%;
+            animation-delay: 1.5s;
+        }
+
+        .firefly:nth-child(5) {
+            top: 70%;
+            left: 20%;
+            animation-delay: 0.5s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+
+    <h1>مرحباً، {{ username }}</h1>
+    <a href="/logout">تسجيل الخروج</a>
+
+    <h2>الرسائل</h2>
+    <ul id="messages">
+        {% for message in messages %}
+        <li>
+            <strong>{{ message.user }}</strong>: {{ message.content }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <form method="POST" action="/send_message">
+        <h2>أضف رسالة</h2>
+
+        <textarea name="content" rows="3" cols="50" required></textarea>
+        <button type="submit">إرسال</button>
+    </form>
+    <script>
+        const socket = io();
+
+        // Listen for new messages from the server
+        socket.on('new_message', function (data) {
+            const messagesList = document.getElementById('messages');
+            const newMessage = document.createElement('li');
+            newMessage.innerHTML = `<strong>${data.user}</strong>: ${data.content}`;
+            messagesList.appendChild(newMessage);
+
+            // Scroll to the bottom of the messages list
+            messagesList.scrollTop = messagesList.scrollHeight;
+        });
+
+        // Emit a message when the form is submitted
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from refreshing the page
+            const content = form.querySelector('textarea[name="content"]').value;
+
+            // Send the message to the server
+            socket.emit('send_message', { content: content });
+
+            // Clear the textarea
+            form.querySelector('textarea[name="content"]').value = '';
+        });
+    </script>
+</body>
+
+</html>
