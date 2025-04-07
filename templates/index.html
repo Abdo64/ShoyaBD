@@ -42,12 +42,15 @@
             flex-direction: column;
             align-items: center;
         }
-
+#message-form {
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: center;
+        }
         textarea,
         input {
             width: 100%;
             padding: 10px;
-            margin-bottom: 20px;
             border: none;
             border-radius: 5px;
             background: #002b4f;
@@ -63,7 +66,9 @@
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            width: 100px;
+            width: 80px;
+            height: 50px;
+            margin-left: 30px;
             font-size: 1.5rem;
             font-weight: bolder;
             box-shadow: 0 0 1px #00ffcc, 0 0 5px #00ffcc;
@@ -163,9 +168,11 @@
 
     <form method="POST" action="/send_message">
         <h2>أضف رسالة</h2>
-
-        <textarea name="content" rows="3" cols="50" required></textarea>
-        <button type="submit">إرسال</button>
+<div id="message-form">
+    <textarea name="content" rows="3" cols="50" required></textarea>
+    <button type="submit">إرسال</button>
+</div>
+        
     </form>
     <script>
         const socket = io();
