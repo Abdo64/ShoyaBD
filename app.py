@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_socketio import SocketIO, emit
@@ -82,6 +82,9 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
 
+@app.route('/Media/<path:filename>')
+def media(filename):
+    return send_from_directory('templates/Media', filename)
 
 @socketio.on('send_message')
 def handle_send_message(data):
