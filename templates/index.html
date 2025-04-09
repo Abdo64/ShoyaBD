@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة الرسائل</title>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <link rel="shortcut icon" href="/Media/IMG_7945.ico" type="image/x-icon">
     <style>
         body {
             background-color: #001f3f;
@@ -13,6 +14,20 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
+            background-image: url('/Media/BGFireFly.png');
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+        }
+
+        .body2 {
+
+            margin: 0;
+            padding: 0;
+
+
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -21,12 +36,24 @@
             width: 100%;
             overflow: hidden;
             direction: rtl;
+
+            background-color: rgba(0, 22, 19, 0.623);
+            /* Adjust the opacity (0.5 for 50%) */
+        }
+
+        #Fire {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 0 3px #00ffcc, 0 0 10px #00ffcc;
+            /* Reduced firefly shadow intensity */
         }
 
         h1,
         h2 {
             text-shadow: 0 0 3px #00ffcc, 0 0 4px #00ffcc;
             margin-top: 1px;
+            margin-bottom: 1px;
         }
 
         form {
@@ -75,7 +102,6 @@
             font-size: 1.5rem;
             font-weight: bolder;
             box-shadow: 0 0 1px #00ffcc, 0 0 5px #00ffcc;
-            /* Reduced shadow intensity */
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
@@ -88,6 +114,8 @@
         a {
             color: #00ffcc;
             text-decoration: none;
+            padding: 5px 10px;
+            font-weight: bold;
         }
 
         a:hover {
@@ -155,10 +183,12 @@
             width: 100%;
             text-align: center;
         }
+
         .name-logout h1 {
             margin: 0;
             margin-left: 10px;
         }
+
         .name-logout a {
             color: #00ffcc;
             text-decoration: none;
@@ -173,62 +203,68 @@
 </head>
 
 <body>
-    <div class="firefly"></div>
-    <div class="firefly"></div>
-    <div class="firefly"></div>
-    <div class="firefly"></div>
-    <div class="firefly"></div>
+    <div class="body2">
+        <div class="firefly"></div>
+        <div class="firefly"></div>
+        <div class="firefly"></div>
+        <div class="firefly"></div>
+        <div class="firefly"></div>
 
 
-    <div class="name-logout">
-        <h1>مرحباً، {{ username }}</h1>
-        <a href="/logout">تسجيل الخروج</a>
-    </div>
+        <div class="name-logout">
+            <h1 dir="rtl">يوم ميلاد شوياا!!!</h1>
 
-    <h2>الرسائل</h2>
-    <ul id="messages">
-        {% for message in messages %}
-        <li>
-            <strong>{{ message.user }}</strong>: {{ message.content }}
-        </li>
-        {% endfor %}
-    </ul>
-
-    <form method="POST" action="/send_message">
-        <h2>أضف رسالة</h2>
-        <div id="message-form">
-            <textarea name="content" rows="3" cols="50" required></textarea>
-            <button type="submit">إرسال</button>
+            <a href="/logout">تسجيل الخروج</a>
         </div>
 
-    </form>
-    <script>
-        const socket = io();
+        <h2>الرسائل</h2>
+        <img id="Fire" src="/Media/IMG_7945.PNG" alt="">
 
-        // Listen for new messages from the server
-        socket.on('new_message', function (data) {
-            const messagesList = document.getElementById('messages');
-            const newMessage = document.createElement('li');
-            newMessage.innerHTML = `<strong>${data.user}</strong>: ${data.content}`;
-            messagesList.appendChild(newMessage);
+        <ul id="messages">
+            {% for message in messages %}
+            <li>
+                <strong>{{ message.user }}</strong>: {{ message.content }}
+            </li>
+            {% endfor %}
+        </ul>
 
-            // Scroll to the bottom of the messages list
-            messagesList.scrollTop = messagesList.scrollHeight;
-        });
+        <form method="POST" action="/send_message">
+            <h2>أضف رسالة</h2>
+            <div id="message-form">
+                <textarea name="content" rows="3" cols="50" required></textarea>
+                <button type="submit">إرسال</button>
+            </div>
 
-        // Emit a message when the form is submitted
-        const form = document.querySelector('form');
-        form.addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the form from refreshing the page
-            const content = form.querySelector('textarea[name="content"]').value;
+        </form>
+        <script>
+            const socket = io();
 
-            // Send the message to the server
-            socket.emit('send_message', { content: content });
+            // Listen for new messages from the server
+            socket.on('new_message', function (data) {
+                const messagesList = document.getElementById('messages');
+                const newMessage = document.createElement('li');
+                newMessage.innerHTML = `<strong>${data.user}</strong>: ${data.content}`;
+                messagesList.appendChild(newMessage);
 
-            // Clear the textarea
-            form.querySelector('textarea[name="content"]').value = '';
-        });
-    </script>
+                // Scroll to the bottom of the messages list
+                messagesList.scrollTop = messagesList.scrollHeight;
+            });
+
+            // Emit a message when the form is submitted
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the form from refreshing the page
+                const content = form.querySelector('textarea[name="content"]').value;
+
+                // Send the message to the server
+                socket.emit('send_message', { content: content });
+
+                // Clear the textarea
+                form.querySelector('textarea[name="content"]').value = '';
+            });
+        </script>
+    </div>
+
 </body>
 
 </html>
