@@ -31,7 +31,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             height: 100vh;
             width: 100%;
             overflow: hidden;
@@ -190,6 +190,7 @@
             align-items: center;
             justify-content: space-evenly;
             width: 100%;
+            margin-top: 20px;
             text-align: center;
         }
 
@@ -222,12 +223,13 @@
 
         <div class="name-logout">
             <h1 dir="rtl">يوم ميلاد شوياا!!!</h1>
-
             <a href="/logout">تسجيل الخروج</a>
         </div>
+        <div class="section">
+            <h2>الرسائل</h2>
+            <img id="Fire" src="./Media/IMG_7945.PNG" alt="">
 
-        <h2>الرسائل</h2>
-        <img id="Fire" src="./Media/IMG_7945.PNG" alt="">
+        </div>
 
         <ul id="messages">
             {% for message in messages %}
